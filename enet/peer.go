@@ -10,29 +10,6 @@ type Peer struct {
    peer *C.ENetPeer
 }
 
-func new_packet( data []bytes, flags uint ) *C.ENetPacket {
-	packet := C.enet_packet_create(unsafe.Pointer(&data[0]), C.size_t(len(data)), C.enet_uint32(flags))
-	if unsafe.Pointer(packet) == unsafe.Pointer(uintptr(0)) {
-      panic("this should never happen")
-	}
-	return packet
-}
-
-func from_packet( packet *C.ENetPacket ) []byte {
-   ret := make([]byte, packet.dataLength)
-   for i:=0; i<len(ret); i++ {
-      ret[i] = byte(packet.data[i])
-   }
-}
-
-func zero_or_error( val C.int) error {
-   if val == 0 {
-      return error{ret}
-   } else {
-      return nil
-   }
-}
-
 // enet_peer_send
 func (peer Peer) Send(channelID uint8, data []byte, flags uint) error {
    packet := new_packet( data, flags )

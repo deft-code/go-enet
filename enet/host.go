@@ -24,19 +24,24 @@ func conv_addr(address net.UDPAddr) (ret C.ENetAddress) {
 }
 
 // enet_host_create
-func CreateHost(address net.UDPAddr, peerCount uint, channelLimit uint, incomingBandwidth uint32, outgoingBandwith uint32) Host {
-	addr := conv_addr(address)
-	host := C.enet_host_create(&addr, C.size_t(peerCount), C.size_t(channelLimit), C.enet_uint32(incomingBandwidth), C.enet_uint32(outgoingBandwith))
-	if unsafe.Pointer(host) == unsafe.Pointer(0) {
-		log.Fatal("TODO return an error here")
-	}
-	return Host{host}
+func CreateHost(address net.UDPAddr, peerCount uint, channelLimit uint,
+      incomingBandwidth uint32, outgoingBandwith uint32) Host {
+   addr := conv_addr(address)
+   host := C.enet_host_create(&addr, C.size_t(peerCount),
+      C.size_t(channelLimit),
+      C.enet_uint32(incomingBandwidth),
+      C.enet_uint32(outgoingBandwith))
+
+   if unsafe.Pointer(host) == unsafe.Pointer(0) {
+      log.Fatal("TODO return an error here")
+   }
+   return Host{host}, 
 }
 
 // enet_host_destory
 func (host Host) Destory() {
 	C.enet_host_destroy(host.host)
-   host.host = null
+   host.host = uintptr(0)
 }
 
 // enet_host_connet
@@ -51,10 +56,8 @@ func (host Host) Connect(address net.UDPAddr, channelCount uint, data uint) ENet
 
 // enet_host_flush
 func (host Host) Flush() {
-	C.enet_host_flush()
+	C.enet_host_flush(host.host)
 }
-
-type EnetEvent *C.ENetEvent
 
 // enet_host_service
 func (host Host) Service(event ENetEvent, timeout_ms uint) int {
@@ -63,5 +66,5 @@ func (host Host) Service(event ENetEvent, timeout_ms uint) int {
 
 // enet_host_broadcast
 func (host Host) Broadcast(channelID uint8, packet ENetPacket) {
-	C.enet_host_broadcast(C.enet_uint8(channelID), packet)
+	C.enet_host_broadcast(host.host, C.enet_uint8(channelID), packet)
 }
