@@ -6,8 +6,13 @@ package enet
 */
 import "C"
 
-func Initialize() int {
-	return int(C.enet_initialize())
+import "errors"
+
+func Initialize() error {
+	if C.enet_initialize() != C.int(0) {
+		return errors.New("ENet failed to initialize")
+	}
+	return nil
 }
 
 func Deinitialize() {

@@ -13,7 +13,7 @@ type Peer struct {
 }
 
 // enet_peer_send
-func (peer Peer) Send(channelID uint8, data []byte, flags Flag) error {
+func (peer *Peer) Send(channelID uint8, data []byte, flags Flag) error {
 	cpacket := new_packet(data, flags)
 	defer C.enet_packet_destroy(cpacket)
 
@@ -25,33 +25,33 @@ func (peer Peer) Send(channelID uint8, data []byte, flags Flag) error {
 }
 
 // enet_peer_receive
-func (peer Peer) Receive() ([]byte, uint8) {
+func (peer *Peer) Receive() ([]byte, uint8) {
 	var channel_id C.enet_uint8 = 0
 	packet := C.enet_peer_receive(peer.peer, &channel_id)
 	return from_packet(packet), uint8(channel_id)
 }
 
 // enet_peer_reset
-func (peer Peer) Reset() {
+func (peer *Peer) Reset() {
 	C.enet_peer_reset(peer.peer)
 }
 
 // enet_peer_ping
-func (peer Peer) Ping() {
+func (peer *Peer) Ping() {
 	C.enet_peer_ping(peer.peer)
 }
 
 // enet_peer_disconnect_now
-func (peer Peer) DisconnectNow(data uint) {
+func (peer *Peer) DisconnectNow(data uint) {
 	C.enet_peer_disconnect_now(peer.peer, C.enet_uint32(data))
 }
 
 // enet_peer_disconnect
-func (peer Peer) Disconnect(data uint) {
+func (peer *Peer) Disconnect(data uint) {
 	C.enet_peer_disconnect(peer.peer, C.enet_uint32(data))
 }
 
 // enet_peer_disconnect_later
-func (peer Peer) DisconnectLater(data uint) {
+func (peer *Peer) DisconnectLater(data uint) {
 	C.enet_peer_disconnect_later(peer.peer, C.enet_uint32(data))
 }

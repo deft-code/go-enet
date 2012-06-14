@@ -14,7 +14,7 @@ func TestConvAddr(t *testing.T) {
 		t.Error(addr)
 	}
 
-	caddr := conv_addr(*addr)
+	caddr := conv_addr(addr)
 	if caddr.port != 9998 {
 		t.Error(caddr)
 	}
@@ -29,5 +29,23 @@ func TestConvAddr(t *testing.T) {
 
 	if cbuf != buf {
 		t.Errorf("%v != %v", cbuf, buf)
+	}
+}
+
+func TestCreatHost(t *testing.T) {
+	addr, err := net.ResolveUDPAddr("udp", "localhost:9998")
+	if err != nil {
+		t.Error(err)
+	}
+
+	host, err := CreateHost(addr, 2, 2, 0, 0)
+	if err != nil {
+		t.Error(err)
+	} else {
+		defer host.Destory()
+	}
+
+	if host.host.peerCount != 2 {
+		t.Error(host.host.peerCount)
 	}
 }

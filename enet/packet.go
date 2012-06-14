@@ -18,13 +18,14 @@ const (
 )
 
 func new_packet(data []byte, flags Flag) *C.ENetPacket {
-	packet := C.enet_packet_create(unsafe.Pointer(&data[0]), C.size_t(len(data)), C.enet_uint32(flags))
-	if packet == nil {
+	c_packet := C.enet_packet_create(unsafe.Pointer(&data[0]), C.size_t(len(data)), C.enet_uint32(flags))
+	if c_packet == nil {
 		panic("Allocation failure inside ENet")
 	}
-	return packet
+	return c_packet
 }
 
-func from_packet(cpacket *C.ENetPacket) []byte {
-	return C.GoBytes(unsafe.Pointer(cpacket.data), C.int(cpacket.dataLength))
+func from_packet(c_packet *C.ENetPacket) []byte {
+	defer C.enet_packet_destory(c_packet)
+	return C.GoBytes(unsafe.Pointer(c_packet.data), C.int(c_packet.dataLength))
 }
