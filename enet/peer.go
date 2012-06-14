@@ -6,21 +6,26 @@ package enet
 */
 import "C"
 
+import "errors"
+
 type Peer struct {
-   peer *C.ENetPeer
+	peer *C.ENetPeer
 }
 
 // enet_peer_send
-func (peer Peer) Send(channelID uint8, data []byte, flags uint) error {
-   packet := new_packet( data, flags )
-   defer C.enet_packet_destroy(packet)
+func (peer Peer) Send(channelID uint8, data []byte, flags Flag) error {
+	cpacket := new_packet(data, flags)
+	defer C.enet_packet_destroy(cpacket)
 
-   return zero_or_error( C.enet_peer_send(
-         peer.peer, C.enet_uint8(channelID), packet))
+	ret := C.enet_peer_send(peer.peer, C.enet_uint8(channelID), cpacket)
+	if ret < 0 {
+		return errors.New("ENet failed to send packet")
+	}
+	return nil
 }
 
 // enet_peer_receive
-func (peer Peer) Receive() ([]byte,uint8)  {
+func (peer Peer) Receive() ([]byte, uint8) {
 	var channel_id C.enet_uint8 = 0
 	packet := C.enet_peer_receive(peer.peer, &channel_id)
 	return from_packet(packet), uint8(channel_id)
