@@ -44,7 +44,7 @@ func CreateHost(address *net.UDPAddr, peerCount uint, channelLimit uint, incomin
 }
 
 // enet_host_destroy
-func (host *Host) Destory() {
+func (host *Host) Destroy() {
 	C.enet_host_destroy(host.host)
 	//host.host = uintptr(0)
 }

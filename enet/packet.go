@@ -26,6 +26,6 @@ func new_packet(data []byte, flags Flag) *C.ENetPacket {
 }
 
 func from_packet(c_packet *C.ENetPacket) []byte {
-	defer C.enet_packet_destory(c_packet)
+	defer C.enet_packet_destroy(c_packet)
 	return C.GoBytes(unsafe.Pointer(c_packet.data), C.int(c_packet.dataLength))
 }

@@ -14,10 +14,10 @@ type Peer struct {
 
 // enet_peer_send
 func (peer *Peer) Send(channelID uint8, data []byte, flags Flag) error {
-	cpacket := new_packet(data, flags)
-	defer C.enet_packet_destroy(cpacket)
+	c_packet := new_packet(data, flags)
+	defer C.enet_packet_destroy(c_packet)
 
-	ret := C.enet_peer_send(peer.peer, C.enet_uint8(channelID), cpacket)
+	ret := C.enet_peer_send(peer.peer, C.enet_uint8(channelID), c_packet)
 	if ret < 0 {
 		return errors.New("ENet failed to send packet")
 	}

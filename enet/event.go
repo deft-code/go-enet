@@ -45,7 +45,7 @@ func (host *Host) create_event(c_event *C.ENetEvent) *Event {
 	case RECEIVE:
 		enforce(peer != nil, host, peer)
 		enforce(c_event.packet != nil)
-   default:
+	default:
 		enforce(false, "This should never occur", e_type)
 	}
 	return &Event{
