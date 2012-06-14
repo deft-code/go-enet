@@ -72,7 +72,7 @@ func ret_to_error(cevent *C.ENetEvent, ret C.int) (Event, error) {
 	case ret > 0:
 		return create_event(cevent), nil
 	}
-   panic("All cases covered")
+	panic("All cases covered")
 }
 
 // enet_host_service
