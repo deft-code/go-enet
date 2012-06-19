@@ -42,7 +42,7 @@ func TestCreatHost(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	} else {
-		defer host.Destory()
+		defer host.Destroy()
 	}
 
 	if host.host.peerCount != 2 {

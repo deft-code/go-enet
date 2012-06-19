@@ -7,6 +7,7 @@ package enet
 import "C"
 
 import "unsafe"
+import "log"
 
 type Flag uint
 
@@ -26,6 +27,10 @@ func new_packet(data []byte, flags Flag) *C.ENetPacket {
 }
 
 func from_packet(c_packet *C.ENetPacket) []byte {
+   log.Printf("from packet: %#v",c_packet)
+   if c_packet == nil {
+      return nil
+   }
 	defer C.enet_packet_destroy(c_packet)
 	return C.GoBytes(unsafe.Pointer(c_packet.data), C.int(c_packet.dataLength))
 }

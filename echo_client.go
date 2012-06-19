@@ -88,6 +88,8 @@ func main() {
 			default:
 				log.Fatal("unkown event", event)
 			}
+
+         break
 		}
 	}
 }
