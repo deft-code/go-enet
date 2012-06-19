@@ -39,12 +39,12 @@ func main() {
 
 		switch event.Type {
 		case enet.CONNECT:
-			log.Log("new connection: ", event.Data)
+			log.Println("new connection: ", event.Data)
 		case enet.DISCONNECT:
-			log.Log("disconnection: ", event.Data)
+			log.Println("disconnection: ", event.Data)
 		case enet.RECEIVE:
-			log.Log("received: ", event.Packet)
-			msg = string(event.Packet)
+			log.Println("received: ", event.Packet)
+			msg := string(event.Packet)
 			switch msg {
 			case "stop":
 				event.Peer.Disconnect(42)
