@@ -40,7 +40,7 @@ func CreateHost(address *net.UDPAddr, peerCount uint, channelLimit uint, incomin
 	if c_host == nil {
 		return nil, errors.New("ENet failed to create an ENetHost.")
 	}
-   C.enet_host_compress( c_host, nil)
+	C.enet_host_compress(c_host, nil)
 	return &Host{c_host, make(map[*C.ENetPeer]*Peer)}, nil
 }
 

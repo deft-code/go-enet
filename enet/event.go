@@ -35,18 +35,18 @@ func (host *Host) create_event(c_event *C.ENetEvent) *Event {
 	e_type := Type(c_event._type)
 	switch e_type {
 	case CONNECT:
-      log.Printf("connect: %#v",c_event)
-      if peer == nil {
-         peer = &Peer{c_event.peer}
-         host.peers[c_event.peer] = peer
-      }
+		log.Printf("connect: %#v", c_event)
+		if peer == nil {
+			peer = &Peer{c_event.peer}
+			host.peers[c_event.peer] = peer
+		}
 	case DISCONNECT:
-      log.Printf("disconnect: %#v",c_event)
+		log.Printf("disconnect: %#v", c_event)
 		enforce(peer != nil, host, peer)
 		delete(host.peers, c_event.peer)
-      peer.peer = nil
+		peer.peer = nil
 	case RECEIVE:
-      log.Printf("receive: %#v",c_event)
+		log.Printf("receive: %#v", c_event)
 		enforce(peer != nil, host, peer)
 		enforce(c_event.packet != nil)
 	case Type(C.ENET_EVENT_TYPE_NONE):

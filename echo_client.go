@@ -89,7 +89,7 @@ func main() {
 				log.Fatal("unkown event", event)
 			}
 
-         break
+			break
 		}
 	}
 }
